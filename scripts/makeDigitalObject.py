@@ -5,6 +5,9 @@
 # 2. URL/URI to Digital Object
 # 3. Local identifier
 # 4. Digital Object Title (Use if you would like to overwrite the assocated Archival Object's title. Otherwise can be left blank)
+#to be integrated: 
+# 5. VRA Core Level (used defined vocabulary)
+# 6. Type  (used defined vocabulary)
 
 #Import modules and configuration files.
 import json
@@ -50,24 +53,26 @@ with open(digital_object_csv,'r') as csvfile, open(updated_digital_object_csv,'a
 		#Make datetime variable formatted as YYYYMMDDHHMMSS
 		dt = datetime.datetime.today().strftime('%Y%m%d%H%M%S%f')
 		
-		#Define metadata: all values for the new DAO record, except title
+		#Define metadata in CSV: all values for the new DAO record, except title
 		archival_object_UID = row[0] 
-		new_do_url = row[1]
-		new_do_id = dt #FOR TESTING PURPOSES ONLY
-		#new_do_id = row[2] #UNCOMMENT FOR PRODUCTION
-
+		file_uri = row[1]
+		digital_object_id = dt #FOR TESTING PURPOSES ONLY. In production, replace with:	new_do_id = row[2]
+		#the title is defined below and skipped here, but should be placed in row[3] if used.
+		level = row[4] #VRA Core Level
+		digital_object_type = row[5] #Type
+		
 		#Download the archival object record, into a variable
 		archival_object_json = requests.get(baseURL + '/repositories/' + repositoryID + '/archival_objects/' + archival_object_UID ,headers=headers).json()
 		
 		#Define metadata: title of Digital Object. Script will pull from the CSV file. If the CSV title cell is blank, the Archival Object's title will be used. 
 		if not row[3]:
-			new_do_title = archival_object_json['display_string']
+			title = archival_object_json['display_string']
 		else:
-			new_do_title = row[3]
-		print(new_do_title)
+			title = row[3]
+		print(title)
 
 		#Plug the metadata values into a variable that holds the new DAO record (before it's uploaded)
-		digital_object_json = {"jsonmodel_type":"digital_object",'title':new_do_title,'digital_object_id':new_do_id,'file_versions':[{'file_uri':new_do_url}]}
+		digital_object_json = {"jsonmodel_type":"digital_object",'title':title,'digital_object_id':digital_object_id,'file_versions':[{'file_uri':file_uri}],'level':level,'digital_object_type':digital_object_type}
 
 		#Format the JSON for the new DAO record
 		digital_object_data = json.dumps(digital_object_json)
