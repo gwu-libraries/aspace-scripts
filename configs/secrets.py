@@ -1,5 +1,5 @@
 #API baseURL of archivesspace (probably ends in :8089)
-baseURL='"
+baseURL=''
 
 #Username to execute commands
 user=''
