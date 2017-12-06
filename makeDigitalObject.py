@@ -16,14 +16,21 @@ import secrets #secrets.py is a file that should be in the same directory as thi
 import configs #configs.py is a file that should be in the same directory as this file
 import datetime
 import csv
+import argparse
+
+#Set up argparse so that the script can take arguments in the terminal.
+parser = argparse.ArgumentParser()
+parser.add_argument("input", help="path to the csv of new Digital Objects and their metadata")
+parser.add_argument("output", help="path to CSV output file, to which the records will be added to the bottom. If the file doesn't exist, it will be created.")
+args = parser.parse_args()
 
 #Define variables contained in the secrets.py and configs.py files.
 baseURL = secrets.baseURL
 user = secrets.user
 password = secrets.password
 repositoryID = configs.repositoryID
-digital_object_csv = configs.digital_object_csv
-updated_digital_object_csv  = configs.updated_digital_object_csv 
+digital_object_csv =  = args.input
+updated_digital_object_csv  = args.output 
 
 #Authentication
 try:

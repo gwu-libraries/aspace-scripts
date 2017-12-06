@@ -1,8 +1,8 @@
 #API baseURL of archivesspace (probably ends in :8089)
-baseURL=''
+baseURL='http://YOURURL.COM:8089'
 
 #Username to execute commands
-user=''
+user='enter username here'
 
 #Password for user
-password=''
+password='enter password here'
